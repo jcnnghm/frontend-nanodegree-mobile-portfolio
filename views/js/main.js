@@ -373,8 +373,7 @@ var pizzaElementGenerator = function(i) {
   pizzaDescriptionContainer = document.createElement("div");
 
   pizzaContainer.classList.add("randomPizzaContainer");
-  pizzaContainer.style.width = "33.33%";
-  pizzaContainer.style.height = "325px";
+  pizzaContainer.classList.add("mediumPizza");
   pizzaContainer.id = "pizza" + i;                // gives each pizza element a unique id
   pizzaImageContainer.classList.add("col-md-6");
 
@@ -399,6 +398,7 @@ var pizzaElementGenerator = function(i) {
 };
 
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
+// Optimization: using classes to control pizza container size
 var resizePizzas = function(size) { 
   window.performance.mark("mark_start_resize");   // User Timing API function
 
@@ -421,39 +421,30 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-  // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
-  function determineDx (elem, size) {
-    var oldwidth = elem.offsetWidth;
-    var windowwidth = document.querySelector("#randomPizzas").offsetWidth;
-    var oldsize = oldwidth / windowwidth;
-
-    // TODO: change to 3 sizes? no more xl?
-    // Changes the slider value to a percent width
-    function sizeSwitcher (size) {
-      switch(size) {
-        case "1":
-          return 0.25;
-        case "2":
-          return 0.3333;
-        case "3":
-          return 0.5;
-        default:
-          console.log("bug in sizeSwitcher");
-      }
+  // Returns the css class corresponding to the size selected
+  function sizeClass (size) {
+    switch(size) {
+      case "1":
+        return "smallPizza";
+      case "2":
+        return "mediumPizza";
+      case "3":
+        return "largePizza";
+      default:
+        console.log("bug in sizeClass");
     }
-
-    var newsize = sizeSwitcher(size);
-    var dx = (newsize - oldsize) * windowwidth;
-
-    return dx;
   }
 
-  // Iterates through pizza elements on the page and changes their widths
+  // Iterates through pizza elements on the page and resets the pizza size class
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    var pizzaContainers = document.querySelectorAll(".randomPizzaContainer");
+    for (var i = 0; i < pizzaContainers.length; i++) {
+      pizzaContainers[i].classList.remove("smallPizza");
+      pizzaContainers[i].classList.remove("mediumPizza");
+      pizzaContainers[i].classList.remove("largePizza");
+
+
+      pizzaContainers[i].classList.add(sizeClass(size));
     }
   }
 
@@ -503,8 +494,10 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
+  // Optimization: Moved calculation out of loop
+  var scrollTopPhase = document.body.scrollTop / 1250;
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    var phase = Math.sin(scrollTopPhase + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
