@@ -14,7 +14,7 @@ Some useful tips to help you get started:
   $> python -m SimpleHTTPServer 8080
   ```
 
-1. Open a browser and visit localhost:8080
+1. Open a browser and visit localhost:8080/index.min.html
 1. Download and install [ngrok](https://ngrok.com/) to make your local server accessible remotely.
 
   ``` bash
@@ -22,7 +22,7 @@ Some useful tips to help you get started:
   $> ngrok 8080
   ```
 
-1. Copy the public URL ngrok gives you and run it through PageSpeed Insights! [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
+1. Copy the public URL ngrok gives you and run it through PageSpeed Insights, accessing the index.min.html file! [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
 
 #### Part 2: Optimize Frames per Second in pizza.html
 
@@ -40,3 +40,16 @@ time is under 1ms.
 #### Scrolling
 
 I moved an expensive scrollTop lookup/calculation out of the loop.
+
+### Other Optimizations
+
+Grunt is being used to minimize and inline css, js, and html for both the
+pizza and index files.  Grunt can be executed by first installing its
+dependencies using `npm install`, then grunt can be executed
+using the `grunt` command.
+
+For both index and pizza files, `.min.html` and `.dist.html` files have been
+created.  The `.dist.html` files inline and minimize css and js as
+appropriate.  The `.min.html` further minimize the html files.  The `.min.html`
+files should be used, the `.dist.html` files are just provided to make it a
+little more obvious what's going on.
