@@ -8,17 +8,14 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        copy: {
-            portfolio: {
-                src: 'img/*',
-                dest: 'dist/'
+        useminPrepare: {
+            html: 'index.html',
+            options: {
+                dest: '.'
             }
         },
-        useminPrepare: {
-            html: 'index.html'
-        },
         usemin: {
-            html: 'index.min.html'
+            html: 'index.dist.html'
         },
         inline: {
             options: {
@@ -27,7 +24,7 @@ module.exports = function(grunt) {
             },
             portfolio: {
                 src: 'index.html',
-                dest: 'index.min.html'
+                dest: 'index.dist.html'
             }
         }
     });
@@ -38,7 +35,6 @@ module.exports = function(grunt) {
         'concat:generated',
         'uglify:generated',
         'cssmin:generated',
-        'usemin',
-        'copy'
+        'usemin'
     ]);
 };
