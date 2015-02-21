@@ -9,13 +9,17 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         useminPrepare: {
-            html: 'index.html',
-            options: {
-                dest: '.'
+            portfolio: {
+                options: {
+                    dest: '.'
+                },
+                src: 'index.html'
             }
         },
         usemin: {
-            html: 'index.dist.html'
+            portfolio: {
+                src: 'index.dist.html'
+            }
         },
         inline: {
             options: {
